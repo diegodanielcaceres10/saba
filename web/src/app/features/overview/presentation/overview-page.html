@@ -1,2 +1,5 @@
-<app-page-header heading="Overview" description="Resumen general de la temporada seleccionada." />
-<p class="mt-6 text-secondary">Esta sección está en desarrollo.</p>
+<app-page-header
+  [heading]="'pages.overview.title' | transloco"
+  [description]="'pages.overview.description' | transloco"
+/>
+<p class="mt-6 text-secondary">{{ 'pages.inDevelopment' | transloco }}</p>

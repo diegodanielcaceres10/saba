@@ -1,12 +1,12 @@
 export interface NavItem {
-  readonly label: string;
+  readonly labelKey: string;
   readonly path: string;
 }
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { label: 'Overview', path: 'overview' },
-  { label: 'Calendar', path: 'calendar' },
-  { label: 'Circuits', path: 'circuits' },
-  { label: 'Drivers', path: 'drivers' },
-  { label: 'Teams', path: 'teams' },
+  { labelKey: 'nav.overview', path: 'overview' },
+  { labelKey: 'nav.calendar', path: 'calendar' },
+  { labelKey: 'nav.circuits', path: 'circuits' },
+  { labelKey: 'nav.drivers', path: 'drivers' },
+  { labelKey: 'nav.teams', path: 'teams' },
 ];

@@ -1,2 +1,5 @@
-<app-page-header heading="Circuits" description="Catálogo de circuitos de Fórmula 1." />
-<p class="mt-6 text-secondary">Esta sección está en desarrollo.</p>
+<app-page-header
+  [heading]="'pages.circuits.title' | transloco"
+  [description]="'pages.circuits.description' | transloco"
+/>
+<p class="mt-6 text-secondary">{{ 'pages.inDevelopment' | transloco }}</p>

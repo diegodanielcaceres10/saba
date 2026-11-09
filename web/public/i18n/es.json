@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "overview": "Resumen",
+    "calendar": "Calendario",
+    "circuits": "Circuitos",
+    "drivers": "Pilotos",
+    "teams": "Equipos"
+  },
+  "pages": {
+    "overview": {
+      "title": "Resumen",
+      "description": "Resumen general de la temporada seleccionada."
+    },
+    "calendar": {
+      "title": "Calendario",
+      "description": "Calendario completo de la temporada."
+    },
+    "circuits": {
+      "title": "Circuitos",
+      "description": "Catálogo de circuitos de Fórmula 1."
+    },
+    "drivers": {
+      "title": "Pilotos",
+      "description": "Directorio de pilotos de Fórmula 1."
+    },
+    "teams": {
+      "title": "Equipos",
+      "description": "Directorio de constructores y escuderías."
+    },
+    "inDevelopment": "Esta sección está en desarrollo."
+  },
+  "a11y": {
+    "mainNavigation": "Navegación principal"
+  },
+  "language": {
+    "label": "Idioma"
+  }
+}

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+import { provideAppTranslations } from '@core/i18n/testing/provide-app-translations';
 import { NAV_ITEMS } from '@core/navigation/nav-items';
 import { Shell } from './shell';
 
@@ -12,6 +13,7 @@ describe('Shell', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        provideAppTranslations(),
         provideRouter([
           { path: '', component: Shell, children: [{ path: 'demo', component: Demo }] },
         ]),

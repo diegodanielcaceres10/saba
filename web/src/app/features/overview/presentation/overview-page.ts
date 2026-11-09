@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { PageHeader } from '@shared/ui/page-header/page-header';
 
 @Component({
   selector: 'app-overview-page',
-  imports: [PageHeader],
+  imports: [PageHeader, TranslocoPipe],
   templateUrl: './overview-page.html',
 })
 export class OverviewPage {}

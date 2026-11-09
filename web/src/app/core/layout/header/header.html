@@ -1,3 +1,9 @@
-<header class="flex h-14 items-center border-b border-secondary/20 bg-surface px-4">
+<header class="flex h-14 items-center justify-between border-b border-secondary/20 bg-surface px-4">
   <app-brand />
+  <app-language-switcher
+    [languages]="languageOptions"
+    [selected]="currentLanguage()"
+    [label]="'language.label' | transloco"
+    (selectedChange)="onLanguageChange($event)"
+  />
 </header>

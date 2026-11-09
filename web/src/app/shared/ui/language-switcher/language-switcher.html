@@ -1,0 +1,11 @@
+<select
+  class="rounded-md border border-secondary/30 bg-base px-2 py-1 text-sm text-text focus-visible:outline-2 focus-visible:outline-accent"
+  [attr.aria-label]="label()"
+  (change)="onChange($event)"
+>
+  @for (language of languages(); track language.code) {
+    <option [value]="language.code" [selected]="language.code === selected()">
+      {{ language.name }}
+    </option>
+  }
+</select>

@@ -1,0 +1,38 @@
+{
+  "nav": {
+    "overview": "Overview",
+    "calendar": "Calendar",
+    "circuits": "Circuits",
+    "drivers": "Drivers",
+    "teams": "Teams"
+  },
+  "pages": {
+    "overview": {
+      "title": "Overview",
+      "description": "General summary of the selected season."
+    },
+    "calendar": {
+      "title": "Calendar",
+      "description": "Full calendar of the season."
+    },
+    "circuits": {
+      "title": "Circuits",
+      "description": "Catalog of Formula 1 circuits."
+    },
+    "drivers": {
+      "title": "Drivers",
+      "description": "Directory of Formula 1 drivers."
+    },
+    "teams": {
+      "title": "Teams",
+      "description": "Directory of constructors and teams."
+    },
+    "inDevelopment": "This section is under development."
+  },
+  "a11y": {
+    "mainNavigation": "Main navigation"
+  },
+  "language": {
+    "label": "Language"
+  }
+}
