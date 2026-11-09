@@ -1,1 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+@use "tailwindcss";
+
+/*
+ * Design tokens. `static` keeps every variable in the output, so component
+ * styles can read them with var(--color-*) even when no utility uses them.
+ */
+@theme static {
+  --color-base: #101114;
+  --color-surface: #1c1e23;
+  --color-accent: #e10600;
+  --color-text: #f5f5f5;
+  --color-secondary: #92949b;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-base);
+    color: var(--color-text);
+  }
+}
