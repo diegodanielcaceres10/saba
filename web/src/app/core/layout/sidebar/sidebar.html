@@ -1,0 +1,16 @@
+<nav aria-label="Main navigation">
+  <ul class="flex gap-1 overflow-x-auto p-2 md:flex-col">
+    @for (item of items(); track item.path) {
+      <li>
+        <a
+          [routerLink]="item.path"
+          routerLinkActive
+          ariaCurrentWhenActive="page"
+          class="block rounded-md border-l-2 border-transparent px-3 py-2 text-sm font-medium whitespace-nowrap text-secondary transition-colors hover:text-text focus-visible:outline-2 focus-visible:outline-accent aria-[current=page]:border-accent aria-[current=page]:bg-surface aria-[current=page]:text-text"
+        >
+          {{ item.label }}
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

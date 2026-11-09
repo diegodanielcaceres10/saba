@@ -1,0 +1,12 @@
+<div class="flex min-h-dvh flex-col">
+  <app-header />
+  <div class="flex flex-1 flex-col md:flex-row">
+    <app-sidebar
+      class="border-b border-secondary/20 md:w-56 md:shrink-0 md:border-r md:border-b-0"
+      [items]="navItems"
+    />
+    <main class="min-w-0 flex-1 p-4 md:p-8">
+      <router-outlet />
+    </main>
+  </div>
+</div>
