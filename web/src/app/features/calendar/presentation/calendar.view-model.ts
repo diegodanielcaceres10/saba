@@ -1,14 +1,13 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { ApiError, ApiErrorKind } from '@core/api/jolpica/api-error';
+import { ApiErrorKind } from '@core/api/jolpica/api-error';
+import { errorKindOf, loadStateOf } from '@core/api/load-state';
 import { Clock } from '@core/time/clock';
-import { SeasonRepository } from '@features/seasons';
+import { SeasonSelection } from '@features/seasons';
 import { CalendarFilter, matchesFilter } from '../domain/calendar-filter';
 import { CalendarRepository } from '../domain/calendar.repository';
 import { GrandPrix } from '../domain/grand-prix';
 import { RaceStatus, statusOf } from '../domain/race-status';
-
-export type CalendarState = 'loading' | 'ready' | 'error';
 
 export interface CalendarEntry {
   readonly grandPrix: GrandPrix;
@@ -21,41 +20,14 @@ export interface CalendarEntry {
 @Injectable()
 export class CalendarViewModel {
   private readonly calendarRepository = inject(CalendarRepository);
-  private readonly seasonRepository = inject(SeasonRepository);
+  private readonly seasonSelection = inject(SeasonSelection);
   private readonly clock = inject(Clock);
 
-  private readonly chosenSeason = signal<number | null>(null);
   private readonly chosenFilter = signal<CalendarFilter>('all');
 
-  private readonly seasonsResource = rxResource({
-    stream: () => this.seasonRepository.getSeasons(),
-  });
-
-  readonly seasons = computed(() =>
-    this.seasonsResource.hasValue() ? this.seasonsResource.value() : [],
-  );
-
-  /**
-   * The chosen season, else the latest one. If the list of seasons cannot be loaded,
-   * the calendar still works with the year of the clock.
-   */
-  readonly selectedSeason = computed<number | null>(() => {
-    const chosen = this.chosenSeason();
-    if (chosen !== null) {
-      return chosen;
-    }
-    if (this.seasonsResource.hasValue()) {
-      return this.seasonsResource.value()[0] ?? null;
-    }
-    return this.seasonsResource.status() === 'error' ? this.clock.now().getUTCFullYear() : null;
-  });
-
-  /** The seasons to choose from. Always includes the selected one, even if the list failed to load. */
-  readonly seasonOptions = computed(() => {
-    const selected = this.selectedSeason();
-    const seasons = this.seasons();
-    return selected === null || seasons.includes(selected) ? seasons : [selected, ...seasons];
-  });
+  readonly seasons = this.seasonSelection.seasons;
+  readonly selectedSeason = this.seasonSelection.selected;
+  readonly seasonOptions = this.seasonSelection.options;
 
   private readonly calendarResource = rxResource({
     params: () => this.selectedSeason() ?? undefined,
@@ -64,25 +36,11 @@ export class CalendarViewModel {
 
   readonly filter = this.chosenFilter.asReadonly();
 
-  readonly state = computed<CalendarState>(() => {
-    switch (this.calendarResource.status()) {
-      case 'error':
-        return 'error';
-      case 'resolved':
-      case 'local':
-        return 'ready';
-      default:
-        return 'loading';
-    }
-  });
+  readonly state = computed(() => loadStateOf(this.calendarResource.status()));
 
-  readonly errorKind = computed<ApiErrorKind | null>(() => {
-    const error = this.calendarResource.error();
-    if (!error) {
-      return null;
-    }
-    return error instanceof ApiError ? error.kind : 'http';
-  });
+  readonly errorKind = computed<ApiErrorKind | null>(() =>
+    errorKindOf(this.calendarResource.error()),
+  );
 
   /** The races of the selected season that match the filter. */
   readonly entries = computed<readonly CalendarEntry[]>(() => {
@@ -103,7 +61,7 @@ export class CalendarViewModel {
   });
 
   selectSeason(season: number): void {
-    this.chosenSeason.set(season);
+    this.seasonSelection.select(season);
   }
 
   setFilter(filter: CalendarFilter): void {
@@ -111,9 +69,7 @@ export class CalendarViewModel {
   }
 
   retry(): void {
-    if (this.seasonsResource.status() === 'error') {
-      this.seasonsResource.reload();
-    }
+    this.seasonSelection.retry();
     this.calendarResource.reload();
   }
 }
