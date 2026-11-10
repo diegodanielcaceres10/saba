@@ -50,6 +50,13 @@ export class CalendarViewModel {
     return this.seasonsResource.status() === 'error' ? this.clock.now().getUTCFullYear() : null;
   });
 
+  /** The seasons to choose from. Always includes the selected one, even if the list failed to load. */
+  readonly seasonOptions = computed(() => {
+    const selected = this.selectedSeason();
+    const seasons = this.seasons();
+    return selected === null || seasons.includes(selected) ? seasons : [selected, ...seasons];
+  });
+
   private readonly calendarResource = rxResource({
     params: () => this.selectedSeason() ?? undefined,
     stream: ({ params: season }) => this.calendarRepository.getCalendar(season),

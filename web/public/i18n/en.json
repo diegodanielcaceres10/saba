@@ -34,5 +34,43 @@
   },
   "language": {
     "label": "Language"
+  },
+  "calendar": {
+    "season": {
+      "label": "Season"
+    },
+    "filters": {
+      "label": "Filter races",
+      "all": "All",
+      "upcoming": "Upcoming",
+      "completed": "Completed"
+    },
+    "status": {
+      "completed": "Completed",
+      "in-progress": "In progress",
+      "upcoming": "Upcoming"
+    },
+    "next": "Next",
+    "round": "Round {{round}}",
+    "sessions": {
+      "title": "Sessions",
+      "practice1": "Practice 1",
+      "practice2": "Practice 2",
+      "practice3": "Practice 3",
+      "sprintQualifying": "Sprint Qualifying",
+      "sprint": "Sprint",
+      "qualifying": "Qualifying",
+      "race": "Race"
+    },
+    "timeZoneNote": "Times are shown in your time zone ({{zone}}).",
+    "loading": "Loading the calendar…",
+    "empty": "There are no races to show.",
+    "retry": "Try again",
+    "errors": {
+      "rate-limited": "Too many requests were sent to the data service. Please wait a moment and try again.",
+      "network": "The data service could not be reached. Check your connection and try again.",
+      "http": "The data service is not available right now. Please try again later.",
+      "invalid-response": "The data received was not in the expected format."
+    }
   }
 }

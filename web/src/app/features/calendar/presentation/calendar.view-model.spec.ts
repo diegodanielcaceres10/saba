@@ -68,6 +68,22 @@ describe('CalendarViewModel', () => {
     expect(viewModel.seasons()).toEqual([2024, 2023]);
   });
 
+  describe('season options', () => {
+    it('offers the seasons that were loaded', async () => {
+      const viewModel = await create();
+
+      expect(viewModel.seasonOptions()).toEqual([2024, 2023]);
+    });
+
+    it('still offers the selected season when the list could not be loaded', async () => {
+      getSeasons.mockReturnValue(throwError(() => new ApiError('network')));
+
+      const viewModel = await create();
+
+      expect(viewModel.seasonOptions()).toEqual([2024]);
+    });
+  });
+
   it('shows the calendar of the latest season by default', async () => {
     const viewModel = await create();
 

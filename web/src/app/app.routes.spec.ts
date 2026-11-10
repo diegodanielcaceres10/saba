@@ -2,6 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { TranslocoService } from '@jsverse/transloco';
+import { NEVER } from 'rxjs';
+import { JolpicaApi } from '@core/api/jolpica/jolpica-api';
+import { SeasonRepository } from '@features/seasons';
 import { provideAppTranslations } from '@core/i18n/testing/provide-app-translations';
 import { NAV_ITEMS } from '@core/navigation/nav-items';
 import en from '../../public/i18n/en.json';
@@ -10,8 +13,14 @@ import { routes } from './app.routes';
 
 describe('app routes', () => {
   beforeEach(() => {
+    // Features that load data get gateways that never answer: these tests only check routing.
     TestBed.configureTestingModule({
-      providers: [provideAppTranslations(), provideRouter(routes)],
+      providers: [
+        provideAppTranslations(),
+        provideRouter(routes),
+        { provide: JolpicaApi, useValue: { get: () => NEVER } },
+        { provide: SeasonRepository, useValue: { getSeasons: () => NEVER } },
+      ],
     });
   });
 
@@ -32,7 +41,7 @@ describe('app routes', () => {
 
   async function headingOf(url: string): Promise<string | undefined> {
     const harness = await RouterTestingHarness.create(url);
-    await harness.fixture.whenStable();
+    harness.fixture.detectChanges();
     const root = harness.routeNativeElement as HTMLElement;
     return root.querySelector('main h1')?.textContent?.trim();
   }
@@ -40,7 +49,7 @@ describe('app routes', () => {
   for (const item of NAV_ITEMS) {
     it(`renders the ${item.path} page inside the shell`, async () => {
       const harness = await RouterTestingHarness.create(`/${item.path}`);
-      await harness.fixture.whenStable();
+      harness.fixture.detectChanges();
 
       const root = harness.routeNativeElement as HTMLElement;
       expect(root.querySelector('main h1')?.textContent?.trim()).toBe(titles(en)[item.path].title);

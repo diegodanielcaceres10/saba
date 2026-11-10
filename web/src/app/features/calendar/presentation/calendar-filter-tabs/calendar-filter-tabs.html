@@ -1,0 +1,16 @@
+<div
+  role="group"
+  class="inline-flex gap-1 rounded-md border border-secondary/30 p-1"
+  [attr.aria-label]="'calendar.filters.label' | transloco"
+>
+  @for (filter of filters; track filter) {
+    <button
+      type="button"
+      class="rounded px-3 py-1 text-sm text-secondary hover:text-text focus-visible:outline-2 focus-visible:outline-accent aria-pressed:bg-accent aria-pressed:text-text"
+      [attr.aria-pressed]="filter === selected()"
+      (click)="selectedChange.emit(filter)"
+    >
+      {{ 'calendar.filters.' + filter | transloco }}
+    </button>
+  }
+</div>

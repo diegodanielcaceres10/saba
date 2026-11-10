@@ -1,0 +1,67 @@
+<article
+  class="rounded-lg border bg-surface p-4"
+  [class]="entry().isNext ? 'border-accent' : 'border-secondary/20'"
+>
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <p class="text-xs tracking-wide text-secondary uppercase">
+        {{ 'calendar.round' | transloco: { round: grandPrix().round } }}
+      </p>
+      <h2 class="mt-1 text-lg font-semibold">
+        <span aria-hidden="true">{{ flag() }}</span> {{ grandPrix().name }}
+      </h2>
+      <p class="text-sm text-secondary">
+        {{ grandPrix().circuit.name }} · {{ grandPrix().circuit.locality }},
+        {{ grandPrix().circuit.country }}
+      </p>
+    </div>
+
+    <div class="flex flex-col items-start gap-2 sm:items-end">
+      <p class="text-sm sm:text-right" data-testid="race-start">
+        <span class="font-medium">{{ raceStart().day }}</span>
+        @if (raceStart().time; as time) {
+          <span class="block text-secondary">{{ time }}</span>
+        }
+      </p>
+      <div class="flex gap-2">
+        @if (entry().isNext) {
+          <span
+            class="rounded-full border border-accent px-2 py-0.5 text-xs font-medium text-accent"
+            data-testid="next"
+          >
+            {{ 'calendar.next' | transloco }}
+          </span>
+        }
+        <span
+          class="rounded-full bg-base px-2 py-0.5 text-xs font-medium text-secondary"
+          [class.bg-accent]="entry().status === 'in-progress'"
+          [class.text-text]="entry().status === 'in-progress'"
+          data-testid="status"
+        >
+          {{ 'calendar.status.' + entry().status | transloco }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <details class="mt-3">
+    <summary class="cursor-pointer text-sm text-secondary hover:text-text">
+      {{ 'calendar.sessions.title' | transloco }}
+    </summary>
+    <ul class="mt-2 divide-y divide-secondary/10 text-sm">
+      @for (session of sessions(); track session.type) {
+        <li class="flex flex-wrap justify-between gap-2 py-1.5">
+          <span data-testid="session-name">{{
+            'calendar.sessions.' + session.type | transloco
+          }}</span>
+          <span class="text-secondary">
+            {{ session.day }}
+            @if (session.time; as time) {
+              · {{ time }}
+            }
+          </span>
+        </li>
+      }
+    </ul>
+  </details>
+</article>

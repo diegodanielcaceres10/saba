@@ -1,0 +1,10 @@
+<select
+  class="rounded-md border border-secondary/30 bg-base px-2 py-1 text-sm text-text focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50"
+  [attr.aria-label]="label()"
+  [disabled]="seasons().length === 0"
+  (change)="onChange($event)"
+>
+  @for (season of seasons(); track season) {
+    <option [value]="season" [selected]="season === selected()">{{ season }}</option>
+  }
+</select>

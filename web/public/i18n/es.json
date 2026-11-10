@@ -34,5 +34,43 @@
   },
   "language": {
     "label": "Idioma"
+  },
+  "calendar": {
+    "season": {
+      "label": "Temporada"
+    },
+    "filters": {
+      "label": "Filtrar carreras",
+      "all": "Todas",
+      "upcoming": "Próximas",
+      "completed": "Finalizadas"
+    },
+    "status": {
+      "completed": "Finalizada",
+      "in-progress": "En curso",
+      "upcoming": "Próxima"
+    },
+    "next": "Siguiente",
+    "round": "Ronda {{round}}",
+    "sessions": {
+      "title": "Sesiones",
+      "practice1": "Práctica 1",
+      "practice2": "Práctica 2",
+      "practice3": "Práctica 3",
+      "sprintQualifying": "Clasificación Sprint",
+      "sprint": "Sprint",
+      "qualifying": "Clasificación",
+      "race": "Carrera"
+    },
+    "timeZoneNote": "Los horarios se muestran en su zona horaria ({{zone}}).",
+    "loading": "Cargando el calendario…",
+    "empty": "No hay carreras para mostrar.",
+    "retry": "Reintentar",
+    "errors": {
+      "rate-limited": "Se enviaron demasiadas solicitudes al servicio de datos. Espere un momento e intente nuevamente.",
+      "network": "No se pudo conectar con el servicio de datos. Verifique su conexión e intente nuevamente.",
+      "http": "El servicio de datos no está disponible en este momento. Intente nuevamente más tarde.",
+      "invalid-response": "Los datos recibidos no tienen el formato esperado."
+    }
   }
 }

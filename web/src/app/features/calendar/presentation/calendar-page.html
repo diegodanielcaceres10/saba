@@ -2,4 +2,53 @@
   [heading]="'pages.calendar.title' | transloco"
   [description]="'pages.calendar.description' | transloco"
 />
-<p class="mt-6 text-secondary">{{ 'pages.inDevelopment' | transloco }}</p>
+
+<div class="mt-6 flex flex-wrap items-center gap-3">
+  <app-season-select
+    [seasons]="viewModel.seasonOptions()"
+    [selected]="viewModel.selectedSeason()"
+    [label]="'calendar.season.label' | transloco"
+    (selectedChange)="viewModel.selectSeason($event)"
+  />
+  <app-calendar-filter-tabs
+    [selected]="viewModel.filter()"
+    (selectedChange)="viewModel.setFilter($event)"
+  />
+</div>
+
+<p class="mt-3 text-sm text-secondary">
+  {{ 'calendar.timeZoneNote' | transloco: { zone: timeZone } }}
+</p>
+
+<div class="mt-6">
+  @switch (viewModel.state()) {
+    @case ('loading') {
+      <p role="status" class="text-secondary">{{ 'calendar.loading' | transloco }}</p>
+    }
+    @case ('error') {
+      <div role="alert" class="rounded-lg border border-accent/50 bg-surface p-4">
+        <p>{{ 'calendar.errors.' + viewModel.errorKind() | transloco }}</p>
+        <button
+          type="button"
+          class="mt-3 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text"
+          (click)="viewModel.retry()"
+        >
+          {{ 'calendar.retry' | transloco }}
+        </button>
+      </div>
+    }
+    @case ('ready') {
+      @if (viewModel.entries().length === 0) {
+        <p class="text-secondary">{{ 'calendar.empty' | transloco }}</p>
+      } @else {
+        <ol class="grid gap-3">
+          @for (entry of viewModel.entries(); track entry.grandPrix.round) {
+            <li>
+              <app-calendar-item [entry]="entry" [locale]="locale()" [timeZone]="timeZone" />
+            </li>
+          }
+        </ol>
+      }
+    }
+  }
+</div>
