@@ -1,0 +1,8 @@
+<input
+  type="search"
+  class="w-full rounded-md border border-secondary/30 bg-base px-3 py-1.5 text-sm text-text placeholder:text-secondary focus-visible:outline-2 focus-visible:outline-accent"
+  [attr.aria-label]="label()"
+  [placeholder]="placeholder()"
+  [value]="value()"
+  (input)="onInput($event)"
+/>

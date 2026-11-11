@@ -36,9 +36,6 @@
     "label": "Language"
   },
   "calendar": {
-    "season": {
-      "label": "Season"
-    },
     "filters": {
       "label": "Filter races",
       "all": "All",
@@ -64,7 +61,12 @@
     },
     "timeZoneNote": "Times are shown in your time zone ({{zone}}).",
     "loading": "Loading the calendar…",
-    "empty": "There are no races to show.",
+    "empty": "There are no races to show."
+  },
+  "common": {
+    "season": {
+      "label": "Season"
+    },
     "retry": "Try again",
     "errors": {
       "rate-limited": "Too many requests were sent to the data service. Please wait a moment and try again.",
@@ -72,5 +74,28 @@
       "http": "The data service is not available right now. Please try again later.",
       "invalid-response": "The data received was not in the expected format."
     }
+  },
+  "drivers": {
+    "searchLabel": "Search drivers",
+    "searchPlaceholder": "Search by name or code",
+    "filters": {
+      "team": "Team",
+      "allTeams": "All teams",
+      "nationality": "Nationality",
+      "allNationalities": "All nationalities",
+      "clear": "Clear filters"
+    },
+    "table": {
+      "caption": "Driver standings",
+      "position": "Pos.",
+      "driver": "Driver",
+      "team": "Team",
+      "nationality": "Nationality",
+      "points": "Points",
+      "wins": "Wins"
+    },
+    "loading": "Loading the standings…",
+    "empty": "There are no standings for this season yet.",
+    "noMatches": "No drivers match your search."
   }
 }

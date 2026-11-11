@@ -1,0 +1,63 @@
+<div class="overflow-x-auto rounded-lg border border-secondary/20 bg-surface">
+  <table class="w-full text-left text-sm">
+    <caption class="sr-only">
+      {{
+        'drivers.table.caption' | transloco
+      }}
+    </caption>
+    <thead class="border-b border-secondary/20 text-xs tracking-wide text-secondary uppercase">
+      <tr>
+        <th scope="col" class="px-3 py-2 font-medium">
+          {{ 'drivers.table.position' | transloco }}
+        </th>
+        <th scope="col" class="px-3 py-2 font-medium">{{ 'drivers.table.driver' | transloco }}</th>
+        <th scope="col" class="px-3 py-2 font-medium">{{ 'drivers.table.team' | transloco }}</th>
+        <th scope="col" class="hidden px-3 py-2 font-medium md:table-cell">
+          {{ 'drivers.table.nationality' | transloco }}
+        </th>
+        <th scope="col" class="px-3 py-2 text-right font-medium">
+          {{ 'drivers.table.points' | transloco }}
+        </th>
+        <th scope="col" class="hidden px-3 py-2 text-right font-medium md:table-cell">
+          {{ 'drivers.table.wins' | transloco }}
+        </th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-secondary/10">
+      @for (row of rows(); track row.id) {
+        <tr>
+          <td class="px-3 py-2 tabular-nums" data-testid="position">{{ row.position }}</td>
+          <th scope="row" class="px-3 py-2 font-normal">
+            <div class="flex items-center gap-3">
+              <span
+                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-base text-xs font-semibold text-secondary"
+                aria-hidden="true"
+                data-testid="badge"
+                >{{ row.badge }}</span
+              >
+              <span>
+                <span class="font-medium" data-testid="name">{{ row.name }}</span>
+                @if (row.code; as code) {
+                  <span class="ml-2 text-xs text-secondary" data-testid="code">{{ code }}</span>
+                }
+              </span>
+            </div>
+          </th>
+          <td class="px-3 py-2 text-secondary" data-testid="team">{{ row.team ?? '—' }}</td>
+          <td class="hidden px-3 py-2 text-secondary md:table-cell" data-testid="nationality">
+            {{ row.nationality }}
+          </td>
+          <td class="px-3 py-2 text-right font-semibold tabular-nums" data-testid="points">
+            {{ row.points }}
+          </td>
+          <td
+            class="hidden px-3 py-2 text-right text-secondary tabular-nums md:table-cell"
+            data-testid="wins"
+          >
+            {{ row.wins }}
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

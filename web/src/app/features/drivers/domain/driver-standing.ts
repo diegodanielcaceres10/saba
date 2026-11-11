@@ -31,3 +31,10 @@ export function fullNameOf(driver: Driver): string {
 export function currentTeamOf(standing: DriverStanding): Team | null {
   return standing.teams.at(-1) ?? null;
 }
+
+/** What stands in for the photo of a driver: the race number, or the initials without one. */
+export function badgeOf(driver: Driver): string {
+  return driver.number !== null
+    ? String(driver.number)
+    : `${driver.givenName[0]}${driver.familyName[0]}`.toUpperCase();
+}

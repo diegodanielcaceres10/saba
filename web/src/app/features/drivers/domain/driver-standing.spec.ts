@@ -1,4 +1,4 @@
-import { currentTeamOf, fullNameOf } from './driver-standing';
+import { badgeOf, currentTeamOf, fullNameOf } from './driver-standing';
 import { standing, team } from './testing/standing-builder';
 
 describe('fullNameOf', () => {
@@ -18,5 +18,23 @@ describe('currentTeamOf', () => {
 
   it('is null when the driver has no team', () => {
     expect(currentTeamOf(standing({ teams: [] }))).toBeNull();
+  });
+});
+
+describe('badgeOf', () => {
+  it('is the permanent number when the driver has one', () => {
+    expect(badgeOf(standing({ number: 33 }).driver)).toBe('33');
+  });
+
+  it('falls back to the initials when there is no number', () => {
+    const farina = standing({ number: null, givenName: 'Nino', familyName: 'Farina' }).driver;
+
+    expect(badgeOf(farina)).toBe('NF');
+  });
+
+  it('writes the initials in capitals', () => {
+    const driver = standing({ number: null, givenName: 'juan', familyName: 'fangio' }).driver;
+
+    expect(badgeOf(driver)).toBe('JF');
   });
 });

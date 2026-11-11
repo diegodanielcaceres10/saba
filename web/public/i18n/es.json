@@ -36,9 +36,6 @@
     "label": "Idioma"
   },
   "calendar": {
-    "season": {
-      "label": "Temporada"
-    },
     "filters": {
       "label": "Filtrar carreras",
       "all": "Todas",
@@ -64,7 +61,12 @@
     },
     "timeZoneNote": "Los horarios se muestran en su zona horaria ({{zone}}).",
     "loading": "Cargando el calendario…",
-    "empty": "No hay carreras para mostrar.",
+    "empty": "No hay carreras para mostrar."
+  },
+  "common": {
+    "season": {
+      "label": "Temporada"
+    },
     "retry": "Reintentar",
     "errors": {
       "rate-limited": "Se enviaron demasiadas solicitudes al servicio de datos. Espere un momento e intente nuevamente.",
@@ -72,5 +74,28 @@
       "http": "El servicio de datos no está disponible en este momento. Intente nuevamente más tarde.",
       "invalid-response": "Los datos recibidos no tienen el formato esperado."
     }
+  },
+  "drivers": {
+    "searchLabel": "Buscar pilotos",
+    "searchPlaceholder": "Buscar por nombre o código",
+    "filters": {
+      "team": "Equipo",
+      "allTeams": "Todos los equipos",
+      "nationality": "Nacionalidad",
+      "allNationalities": "Todas las nacionalidades",
+      "clear": "Limpiar filtros"
+    },
+    "table": {
+      "caption": "Clasificación de pilotos",
+      "position": "Pos.",
+      "driver": "Piloto",
+      "team": "Equipo",
+      "nationality": "Nacionalidad",
+      "points": "Puntos",
+      "wins": "Victorias"
+    },
+    "loading": "Cargando la clasificación…",
+    "empty": "Todavía no hay clasificación para esta temporada.",
+    "noMatches": "Ningún piloto coincide con la búsqueda."
   }
 }

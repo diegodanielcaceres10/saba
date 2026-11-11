@@ -7,7 +7,7 @@
   <app-season-select
     [seasons]="viewModel.seasonOptions()"
     [selected]="viewModel.selectedSeason()"
-    [label]="'calendar.season.label' | transloco"
+    [label]="'common.season.label' | transloco"
     (selectedChange)="viewModel.selectSeason($event)"
   />
   <app-calendar-filter-tabs
@@ -26,16 +26,7 @@
       <p role="status" class="text-secondary">{{ 'calendar.loading' | transloco }}</p>
     }
     @case ('error') {
-      <div role="alert" class="rounded-lg border border-accent/50 bg-surface p-4">
-        <p>{{ 'calendar.errors.' + viewModel.errorKind() | transloco }}</p>
-        <button
-          type="button"
-          class="mt-3 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text"
-          (click)="viewModel.retry()"
-        >
-          {{ 'calendar.retry' | transloco }}
-        </button>
-      </div>
+      <app-error-notice [kind]="viewModel.errorKind()" (retry)="viewModel.retry()" />
     }
     @case ('ready') {
       @if (viewModel.entries().length === 0) {

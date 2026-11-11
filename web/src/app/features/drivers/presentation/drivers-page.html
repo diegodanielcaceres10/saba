@@ -2,4 +2,62 @@
   [heading]="'pages.drivers.title' | transloco"
   [description]="'pages.drivers.description' | transloco"
 />
-<p class="mt-6 text-secondary">{{ 'pages.inDevelopment' | transloco }}</p>
+
+<div class="mt-6 flex flex-wrap items-center gap-3">
+  <app-season-select
+    [seasons]="viewModel.seasonOptions()"
+    [selected]="viewModel.selectedSeason()"
+    [label]="'common.season.label' | transloco"
+    (selectedChange)="viewModel.selectSeason($event)"
+  />
+  <app-search-field
+    class="min-w-56 flex-1"
+    [value]="viewModel.query()"
+    [label]="'drivers.searchLabel' | transloco"
+    [placeholder]="'drivers.searchPlaceholder' | transloco"
+    (valueChange)="viewModel.setQuery($event)"
+  />
+  <app-filter-select
+    [options]="teamOptions()"
+    [selected]="viewModel.teamId()"
+    [label]="'drivers.filters.team' | transloco"
+    [allLabel]="'drivers.filters.allTeams' | transloco"
+    (selectedChange)="viewModel.setTeam($event)"
+  />
+  <app-filter-select
+    [options]="nationalityOptions()"
+    [selected]="viewModel.nationality()"
+    [label]="'drivers.filters.nationality' | transloco"
+    [allLabel]="'drivers.filters.allNationalities' | transloco"
+    (selectedChange)="viewModel.setNationality($event)"
+  />
+  @if (viewModel.hasActiveFilters()) {
+    <button
+      type="button"
+      class="rounded-md px-3 py-1.5 text-sm text-secondary underline hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
+      (click)="viewModel.clearFilters()"
+    >
+      {{ 'drivers.filters.clear' | transloco }}
+    </button>
+  }
+</div>
+
+<div class="mt-6">
+  @switch (viewModel.state()) {
+    @case ('loading') {
+      <p role="status" class="text-secondary">{{ 'drivers.loading' | transloco }}</p>
+    }
+    @case ('error') {
+      <app-error-notice [kind]="viewModel.errorKind()" (retry)="viewModel.retry()" />
+    }
+    @case ('ready') {
+      @if (viewModel.entries().length > 0) {
+        <app-drivers-table [entries]="viewModel.entries()" [locale]="locale()" />
+      } @else if (viewModel.hasActiveFilters()) {
+        <p class="text-secondary">{{ 'drivers.noMatches' | transloco }}</p>
+      } @else {
+        <p class="text-secondary">{{ 'drivers.empty' | transloco }}</p>
+      }
+    }
+  }
+</div>

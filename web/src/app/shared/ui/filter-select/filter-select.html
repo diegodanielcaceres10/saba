@@ -1,0 +1,13 @@
+<select
+  class="w-full rounded-md border border-secondary/30 bg-base px-2 py-1.5 text-sm text-text focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50"
+  [attr.aria-label]="label()"
+  [disabled]="options().length === 0"
+  (change)="onChange($event)"
+>
+  <option value="" [selected]="selected() === null">{{ allLabel() }}</option>
+  @for (option of options(); track option.value) {
+    <option [value]="option.value" [selected]="option.value === selected()">
+      {{ option.label }}
+    </option>
+  }
+</select>
