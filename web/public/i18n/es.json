@@ -97,5 +97,22 @@
     "loading": "Cargando la clasificación…",
     "empty": "Todavía no hay clasificación para esta temporada.",
     "noMatches": "Ningún piloto coincide con la búsqueda."
+  },
+  "teams": {
+    "searchLabel": "Buscar equipos",
+    "searchPlaceholder": "Buscar por nombre de equipo",
+    "table": {
+      "caption": "Clasificación de constructores",
+      "position": "Pos.",
+      "team": "Equipo",
+      "nationality": "Nacionalidad",
+      "drivers": "Pilotos",
+      "points": "Puntos",
+      "wins": "Victorias"
+    },
+    "loading": "Cargando la clasificación…",
+    "empty": "Todavía no hay clasificación para esta temporada.",
+    "noMatches": "Ningún equipo coincide con la búsqueda.",
+    "noChampionship": "En esta temporada no se otorgó el campeonato de constructores, por lo que los equipos no tienen posición ni puntos."
   }
 }

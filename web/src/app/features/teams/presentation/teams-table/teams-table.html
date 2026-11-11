@@ -1,0 +1,54 @@
+<div class="overflow-x-auto rounded-lg border border-secondary/20 bg-surface">
+  <table class="w-full text-left text-sm">
+    <caption class="sr-only">
+      {{
+        'teams.table.caption' | transloco
+      }}
+    </caption>
+    <thead class="border-b border-secondary/20 text-xs tracking-wide text-secondary uppercase">
+      <tr>
+        <th scope="col" class="px-3 py-2 font-medium">{{ 'teams.table.position' | transloco }}</th>
+        <th scope="col" class="px-3 py-2 font-medium">{{ 'teams.table.team' | transloco }}</th>
+        <th scope="col" class="hidden px-3 py-2 font-medium md:table-cell">
+          {{ 'teams.table.nationality' | transloco }}
+        </th>
+        <th scope="col" class="hidden px-3 py-2 font-medium md:table-cell">
+          {{ 'teams.table.drivers' | transloco }}
+        </th>
+        @if (showPoints()) {
+          <th scope="col" class="px-3 py-2 text-right font-medium">
+            {{ 'teams.table.points' | transloco }}
+          </th>
+        }
+        <th scope="col" class="hidden px-3 py-2 text-right font-medium md:table-cell">
+          {{ 'teams.table.wins' | transloco }}
+        </th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-secondary/10">
+      @for (row of rows(); track row.id) {
+        <tr>
+          <td class="px-3 py-2 tabular-nums" data-testid="position">{{ row.position ?? '—' }}</td>
+          <th scope="row" class="px-3 py-2 font-medium" data-testid="name">{{ row.name }}</th>
+          <td class="hidden px-3 py-2 text-secondary md:table-cell" data-testid="nationality">
+            {{ row.nationality }}
+          </td>
+          <td class="hidden px-3 py-2 text-secondary md:table-cell" data-testid="drivers">
+            {{ row.drivers || '—' }}
+          </td>
+          @if (showPoints()) {
+            <td class="px-3 py-2 text-right font-semibold tabular-nums" data-testid="points">
+              {{ row.points }}
+            </td>
+          }
+          <td
+            class="hidden px-3 py-2 text-right text-secondary tabular-nums md:table-cell"
+            data-testid="wins"
+          >
+            {{ row.wins }}
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

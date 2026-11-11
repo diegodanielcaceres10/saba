@@ -2,4 +2,46 @@
   [heading]="'pages.teams.title' | transloco"
   [description]="'pages.teams.description' | transloco"
 />
-<p class="mt-6 text-secondary">{{ 'pages.inDevelopment' | transloco }}</p>
+
+<div class="mt-6 flex flex-wrap items-center gap-3">
+  <app-season-select
+    [seasons]="viewModel.seasonOptions()"
+    [selected]="viewModel.selectedSeason()"
+    [label]="'common.season.label' | transloco"
+    (selectedChange)="viewModel.selectSeason($event)"
+  />
+  <app-search-field
+    class="min-w-56 flex-1"
+    [value]="viewModel.query()"
+    [label]="'teams.searchLabel' | transloco"
+    [placeholder]="'teams.searchPlaceholder' | transloco"
+    (valueChange)="viewModel.setQuery($event)"
+  />
+</div>
+
+<div class="mt-6">
+  @switch (viewModel.state()) {
+    @case ('loading') {
+      <p role="status" class="text-secondary">{{ 'teams.loading' | transloco }}</p>
+    }
+    @case ('error') {
+      <app-error-notice [kind]="viewModel.errorKind()" (retry)="viewModel.retry()" />
+    }
+    @case ('ready') {
+      @if (!viewModel.championshipAwarded()) {
+        <p class="mb-3 text-sm text-secondary">{{ 'teams.noChampionship' | transloco }}</p>
+      }
+      @if (viewModel.entries().length > 0) {
+        <app-teams-table
+          [entries]="viewModel.entries()"
+          [locale]="locale()"
+          [showPoints]="viewModel.championshipAwarded()"
+        />
+      } @else if (viewModel.hasActiveFilters()) {
+        <p class="text-secondary">{{ 'teams.noMatches' | transloco }}</p>
+      } @else {
+        <p class="text-secondary">{{ 'teams.empty' | transloco }}</p>
+      }
+    }
+  }
+</div>

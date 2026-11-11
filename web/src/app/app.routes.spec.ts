@@ -4,6 +4,7 @@ import { RouterTestingHarness } from '@angular/router/testing';
 import { TranslocoService } from '@jsverse/transloco';
 import { NEVER } from 'rxjs';
 import { JolpicaApi } from '@core/api/jolpica/jolpica-api';
+import { DriversRepository } from '@features/drivers';
 import { SeasonRepository } from '@features/seasons';
 import { provideAppTranslations } from '@core/i18n/testing/provide-app-translations';
 import { NAV_ITEMS } from '@core/navigation/nav-items';
@@ -20,6 +21,7 @@ describe('app routes', () => {
         provideRouter(routes),
         { provide: JolpicaApi, useValue: { get: () => NEVER } },
         { provide: SeasonRepository, useValue: { getSeasons: () => NEVER } },
+        { provide: DriversRepository, useValue: { getStandings: () => NEVER } },
       ],
     });
   });

@@ -1,3 +1,4 @@
+import { normalizeText } from '@shared/text/normalize-text';
 import { Driver, DriverStanding, Team } from './driver-standing';
 
 export interface DriverFilters {
@@ -8,15 +9,6 @@ export interface DriverFilters {
 }
 
 export const NO_DRIVER_FILTERS: DriverFilters = { query: '', teamId: null, nationality: null };
-
-/** Lowercase text without accents, so that searches do not depend on either. */
-export function normalizeText(text: string): string {
-  return text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .trim();
-}
 
 function matchesQuery(driver: Driver, words: readonly string[]): boolean {
   const searchable = normalizeText(`${driver.givenName} ${driver.familyName} ${driver.code ?? ''}`);

@@ -97,5 +97,22 @@
     "loading": "Loading the standings…",
     "empty": "There are no standings for this season yet.",
     "noMatches": "No drivers match your search."
+  },
+  "teams": {
+    "searchLabel": "Search teams",
+    "searchPlaceholder": "Search by team name",
+    "table": {
+      "caption": "Constructor standings",
+      "position": "Pos.",
+      "team": "Team",
+      "nationality": "Nationality",
+      "drivers": "Drivers",
+      "points": "Points",
+      "wins": "Wins"
+    },
+    "loading": "Loading the standings…",
+    "empty": "There are no standings for this season yet.",
+    "noMatches": "No teams match your search.",
+    "noChampionship": "No constructors' championship was awarded this season, so the teams have no position or points."
   }
 }
