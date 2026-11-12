@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { ApiError } from '@core/api/jolpica/api-error';
 import { JolpicaApi } from '@core/api/jolpica/jolpica-api';
+import { mapEntries } from '@core/api/map-entries';
 import { DriverStanding } from '../domain/driver-standing';
 import { DriversRepository } from '../domain/drivers.repository';
 import { DriverStandingsDto } from './drivers.dto';
@@ -9,6 +10,9 @@ import { toDriverStanding } from './drivers.mapper';
 
 /** Largest page size Jolpica accepts; a season never has that many drivers. */
 const STANDINGS_PAGE_LIMIT = 100;
+
+/** Drivers without a position go last. Sorting is stable, so they keep their order. */
+const rankOf = (standing: DriverStanding) => standing.position ?? Number.MAX_SAFE_INTEGER;
 
 @Injectable()
 export class JolpicaDriversRepository extends DriversRepository {
@@ -25,7 +29,9 @@ export class JolpicaDriversRepository extends DriversRepository {
           }
           // A season that has not had a race yet has no standings list at all.
           const entries = lists[0]?.DriverStandings ?? [];
-          return entries.map(toDriverStanding).sort((a, b) => a.position - b.position);
+          return mapEntries(entries, toDriverStanding, 'driver standing').sort(
+            (a, b) => rankOf(a) - rankOf(b),
+          );
         }),
       );
   }

@@ -55,6 +55,17 @@ describe('JolpicaCalendarRepository', () => {
     });
   });
 
+  it('fails with an invalid-response error that names the malformed race', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    get.mockReturnValue(of(pageWith([STANDARD_WEEKEND, { ...SPRINT_WEEKEND, raceName: '' }])));
+
+    const failure = await firstValueFrom(repository().getCalendar(2024)).catch((e) => e);
+
+    expect(failure).toMatchObject({ kind: 'invalid-response' });
+    expect(failure.message).toContain('race #2');
+    expect(failure.message).toContain('"round":"5"');
+  });
+
   it('passes gateway errors through unchanged', async () => {
     get.mockReturnValue(throwError(() => new ApiError('rate-limited', 429)));
 

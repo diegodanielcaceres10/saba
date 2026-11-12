@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, forkJoin, map } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of } from 'rxjs';
 import { ApiError } from '@core/api/jolpica/api-error';
 import { JolpicaApi } from '@core/api/jolpica/jolpica-api';
-import { DriversRepository } from '@features/drivers';
+import { mapEntries } from '@core/api/map-entries';
+import { DriverStanding, DriversRepository } from '@features/drivers';
 import { TeamStanding } from '../domain/team-standing';
 import { TeamsRepository } from '../domain/teams.repository';
 import { attachDrivers } from './attach-drivers';
@@ -33,11 +34,24 @@ export class JolpicaTeamsRepository extends TeamsRepository {
           }
           // A season that has not had a race yet has no standings list at all.
           const entries = lists[0]?.ConstructorStandings ?? [];
-          return entries.map(toTeamStanding).sort((a, b) => rankOf(a) - rankOf(b));
+          return mapEntries(entries, toTeamStanding, 'team standing').sort(
+            (a, b) => rankOf(a) - rankOf(b),
+          );
         }),
       );
 
-    return forkJoin({ teams: constructors$, drivers: this.drivers.getStandings(season) }).pipe(
+    // The drivers are secondary information: without them the teams are still worth showing.
+    const drivers$ = this.drivers.getStandings(season).pipe(
+      catchError((error: unknown) => {
+        console.error(
+          '[Saba] Driver standings failed, so the teams are listed without drivers',
+          error,
+        );
+        return of<readonly DriverStanding[]>([]);
+      }),
+    );
+
+    return forkJoin({ teams: constructors$, drivers: drivers$ }).pipe(
       map(({ teams, drivers }) => attachDrivers(teams, drivers)),
     );
   }

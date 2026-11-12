@@ -12,21 +12,26 @@ export function toTeamStanding(dto: ConstructorStandingDto): TeamStanding {
   const points = Number(dto.points);
   const wins = Number(dto.wins);
 
-  if (
-    (dto.position !== undefined && !WHOLE_NUMBER.test(dto.position)) ||
-    !Number.isFinite(points) ||
-    !Number.isInteger(wins)
-  ) {
+  if (!Number.isFinite(points) || !Number.isInteger(wins)) {
     throw new ApiError('invalid-response');
   }
 
   return {
-    position: dto.position === undefined ? null : Number(dto.position),
+    position: toPosition(dto.position),
     points,
     wins,
     team: toTeam(dto.Constructor),
     drivers: [],
   };
+}
+
+/**
+ * Teams that are not ranked, such as before the championship existed or when excluded, come
+ * without a position or with a letter instead. That is part of the data, so it reads as
+ * "no position" and does not reject the season.
+ */
+function toPosition(position: string | undefined): number | null {
+  return position !== undefined && WHOLE_NUMBER.test(position) ? Number(position) : null;
 }
 
 function toTeam(dto: ConstructorDto | undefined): Team {

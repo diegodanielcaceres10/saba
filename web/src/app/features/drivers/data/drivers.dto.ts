@@ -15,7 +15,9 @@ export interface ConstructorDto {
 }
 
 export interface DriverStandingDto {
-  readonly position: string;
+  /** Missing for drivers who are not ranked, such as excluded ones. */
+  readonly position?: string;
+  readonly positionText?: string;
   readonly points: string;
   readonly wins: string;
   readonly Driver: DriverDto;

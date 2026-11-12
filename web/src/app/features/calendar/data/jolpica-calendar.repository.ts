@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { ApiError } from '@core/api/jolpica/api-error';
 import { JolpicaApi } from '@core/api/jolpica/jolpica-api';
+import { mapEntries } from '@core/api/map-entries';
 import { CalendarRepository } from '../domain/calendar.repository';
 import { GrandPrix } from '../domain/grand-prix';
 import { CalendarDto } from './calendar.dto';
@@ -21,7 +22,7 @@ export class JolpicaCalendarRepository extends CalendarRepository {
         if (!races) {
           throw new ApiError('invalid-response');
         }
-        return races.map(toGrandPrix).sort((a, b) => a.round - b.round);
+        return mapEntries(races, toGrandPrix, 'race').sort((a, b) => a.round - b.round);
       }),
     );
   }

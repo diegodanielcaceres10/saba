@@ -16,7 +16,8 @@ export interface Team {
 
 /** Position of a driver in the championship of a season. */
 export interface DriverStanding {
-  readonly position: number;
+  /** `null` when the driver has no place in the championship, such as an excluded one. */
+  readonly position: number | null;
   readonly points: number;
   readonly wins: number;
   readonly driver: Driver;

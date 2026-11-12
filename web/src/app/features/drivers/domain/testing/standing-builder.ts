@@ -3,7 +3,7 @@ import { DriverStanding, Team } from '../driver-standing';
 export const team = (id: string, name: string): Team => ({ id, name });
 
 interface StandingOptions {
-  readonly position?: number;
+  readonly position?: number | null;
   readonly points?: number;
   readonly wins?: number;
   readonly id?: string;
@@ -17,7 +17,7 @@ interface StandingOptions {
 
 export function standing(options: StandingOptions = {}): DriverStanding {
   return {
-    position: options.position ?? 1,
+    position: options.position === undefined ? 1 : options.position,
     points: options.points ?? 0,
     wins: options.wins ?? 0,
     driver: {

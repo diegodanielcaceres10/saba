@@ -24,6 +24,12 @@ describe('toTeamStanding', () => {
     expect(toTeamStanding(UNRANKED)).toMatchObject({ position: null, points: 0, wins: 4 });
   });
 
+  it('has no position when the one it has cannot be read as a whole number', () => {
+    for (const position of ['-', 'E', 'first', '1.5', '']) {
+      expect(toTeamStanding({ ...RED_BULL, position }).position, position).toBeNull();
+    }
+  });
+
   it('keeps fractional points', () => {
     expect(toTeamStanding(FRACTIONAL_POINTS).points).toBe(12.5);
   });
@@ -40,11 +46,6 @@ describe('toTeamStanding', () => {
   describe('invalid data', () => {
     const invalid = (changes: Partial<Record<keyof ConstructorStandingDto, unknown>>) => () =>
       toTeamStanding({ ...RED_BULL, ...changes } as ConstructorStandingDto);
-
-    it('rejects a position that is present but not a whole number', () => {
-      expect(invalid({ position: 'first' })).toThrow(ApiError);
-      expect(invalid({ position: '1.5' })).toThrow(ApiError);
-    });
 
     it('rejects points that are not a number', () => {
       expect(invalid({ points: 'many' })).toThrow(ApiError);

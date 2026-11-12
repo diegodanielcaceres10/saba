@@ -101,12 +101,15 @@ describe('JolpicaCircuitsRepository', () => {
     });
   });
 
-  it('fails with an invalid-response error when a circuit is malformed', async () => {
-    get.mockReturnValue(of(pageOf([{ ...MONZA, circuitName: '' }])));
+  it('fails with an invalid-response error that names the malformed circuit', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    get.mockReturnValue(of(pageOf([MONZA, { ...ALBERT_PARK, circuitName: '' }])));
 
-    await expect(firstValueFrom(repository().getCircuits())).rejects.toMatchObject({
-      kind: 'invalid-response',
-    });
+    const failure = await firstValueFrom(repository().getCircuits()).catch((e) => e);
+
+    expect(failure).toMatchObject({ kind: 'invalid-response' });
+    expect(failure.message).toContain('circuit #2');
+    expect(failure.message).toContain('"circuitId":"albert_park"');
   });
 
   it('passes gateway errors through unchanged', async () => {

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { EMPTY, Observable, expand, map, reduce } from 'rxjs';
 import { ApiError } from '@core/api/jolpica/api-error';
 import { JolpicaApi } from '@core/api/jolpica/jolpica-api';
+import { mapEntries } from '@core/api/map-entries';
 import { Circuit } from '../domain/circuit';
 import { CircuitsRepository } from '../domain/circuits.repository';
 import { CircuitsDto } from './circuits.dto';
@@ -28,7 +29,7 @@ export class JolpicaCircuitsRepository extends CircuitsRepository {
         if (!circuits) {
           throw new ApiError('invalid-response');
         }
-        return circuits.map(toCircuit);
+        return mapEntries(circuits, toCircuit, 'circuit');
       }),
       reduce((all, circuits) => [...all, ...circuits], [] as readonly Circuit[]),
     );

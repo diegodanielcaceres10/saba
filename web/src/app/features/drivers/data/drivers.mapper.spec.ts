@@ -6,6 +6,7 @@ import {
   EARLY_SEASON_DRIVER,
   FRACTIONAL_POINTS,
   TEAM_CHANGE,
+  UNRANKED_DRIVER,
 } from './testing/drivers.fixtures';
 
 describe('toDriverStanding', () => {
@@ -49,6 +50,16 @@ describe('toDriverStanding', () => {
     expect(driver.number).toBeNull();
   });
 
+  it('has no position when the entry does not have one', () => {
+    expect(toDriverStanding(UNRANKED_DRIVER)).toMatchObject({ position: null, points: 0 });
+  });
+
+  it('has no position when the one it has cannot be read as a whole number', () => {
+    for (const position of ['-', 'E', 'first', '1.5', '']) {
+      expect(toDriverStanding({ ...CHAMPION, position }).position, position).toBeNull();
+    }
+  });
+
   it('accepts a driver without teams', () => {
     expect(toDriverStanding({ ...CHAMPION, Constructors: undefined }).teams).toEqual([]);
   });
@@ -60,11 +71,6 @@ describe('toDriverStanding', () => {
   describe('invalid data', () => {
     const invalid = (changes: Partial<Record<keyof DriverStandingDto, unknown>>) => () =>
       toDriverStanding({ ...CHAMPION, ...changes } as DriverStandingDto);
-
-    it('rejects a position that is not a whole number', () => {
-      expect(invalid({ position: 'first' })).toThrow(ApiError);
-      expect(invalid({ position: '1.5' })).toThrow(ApiError);
-    });
 
     it('rejects points that are not a number', () => {
       expect(invalid({ points: 'many' })).toThrow(ApiError);

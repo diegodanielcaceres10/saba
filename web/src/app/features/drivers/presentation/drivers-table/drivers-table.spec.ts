@@ -78,6 +78,19 @@ describe('DriversTable', () => {
     expect([0, 1, 2].map((i) => cell(i, 'position'))).toEqual(['1', '2', '3']);
   });
 
+  it('shows a dash for a driver without a position', async () => {
+    const unranked = standing({
+      position: null,
+      id: 'excluded',
+      givenName: 'Ex',
+      familyName: 'Cluded',
+    });
+
+    const { cell } = await render([unranked]);
+
+    expect(cell(0, 'position')).toBe('—');
+  });
+
   it('shows the name and code of the driver', async () => {
     const { cell } = await render([VERSTAPPEN]);
 

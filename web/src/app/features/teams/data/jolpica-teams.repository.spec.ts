@@ -102,12 +102,38 @@ describe('JolpicaTeamsRepository', () => {
     });
   });
 
-  it('fails when the driver standings cannot be loaded', async () => {
-    get.mockReturnValue(of(pageWith([RED_BULL])));
-    getDriverStandings.mockReturnValue(throwError(() => new ApiError('network')));
+  it('fails with an invalid-response error that names the malformed entry', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    get.mockReturnValue(of(pageWith([RED_BULL, { ...MCLAREN, points: 'many' }])));
 
-    await expect(firstValueFrom(repository().getStandings(2024))).rejects.toMatchObject({
-      kind: 'network',
+    const failure = await firstValueFrom(repository().getStandings(2024)).catch((e) => e);
+
+    expect(failure).toMatchObject({ kind: 'invalid-response' });
+    expect(failure.message).toContain('team standing #2');
+    expect(failure.message).toContain('"points":"many"');
+  });
+
+  describe('when the driver standings cannot be loaded', () => {
+    let consoleError: ReturnType<typeof vi.spyOn>;
+
+    beforeEach(() => {
+      consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+      get.mockReturnValue(of(pageWith([RED_BULL, MCLAREN])));
+      getDriverStandings.mockReturnValue(throwError(() => new ApiError('invalid-response')));
+    });
+
+    it('still lists the teams, without drivers, as they are the main data', async () => {
+      const standings = await firstValueFrom(repository().getStandings(2024));
+
+      expect(standings.map((s) => s.team.id)).toEqual(['red_bull', 'mclaren']);
+      expect(standings.every((s) => s.drivers.length === 0)).toBe(true);
+    });
+
+    it('writes the reason to the console', async () => {
+      await firstValueFrom(repository().getStandings(2024));
+
+      expect(consoleError).toHaveBeenCalledTimes(1);
+      expect(consoleError.mock.calls[0].join(' ')).toContain('without drivers');
     });
   });
 });

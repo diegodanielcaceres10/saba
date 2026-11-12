@@ -66,3 +66,17 @@ export const FRACTIONAL_POINTS: DriverStandingDto = {
   },
   Constructors: [{ constructorId: 'sample_team', name: 'Sample Team' }],
 };
+
+/** Excluded or unranked drivers come without a position; only `positionText` is set. */
+export const UNRANKED_DRIVER: DriverStandingDto = {
+  positionText: 'E',
+  points: '0',
+  wins: '0',
+  Driver: {
+    driverId: 'excluded_driver',
+    givenName: 'Ex',
+    familyName: 'Cluded',
+    nationality: 'British',
+  },
+  Constructors: [{ constructorId: 'sample_team', name: 'Sample Team' }],
+};

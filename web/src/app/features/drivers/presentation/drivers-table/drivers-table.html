@@ -26,7 +26,7 @@
     <tbody class="divide-y divide-secondary/10">
       @for (row of rows(); track row.id) {
         <tr>
-          <td class="px-3 py-2 tabular-nums" data-testid="position">{{ row.position }}</td>
+          <td class="px-3 py-2 tabular-nums" data-testid="position">{{ row.position ?? '—' }}</td>
           <th scope="row" class="px-3 py-2 font-normal">
             <div class="flex items-center gap-3">
               <span
