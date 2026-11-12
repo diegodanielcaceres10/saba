@@ -114,5 +114,23 @@
     "empty": "There are no standings for this season yet.",
     "noMatches": "No teams match your search.",
     "noChampionship": "No constructors' championship was awarded this season, so the teams have no position or points."
+  },
+  "circuits": {
+    "searchLabel": "Search circuits",
+    "searchPlaceholder": "Search by name or city",
+    "filters": {
+      "country": "Country",
+      "allCountries": "All countries",
+      "clear": "Clear filters"
+    },
+    "loading": "Loading the circuits…",
+    "empty": "There are no circuits to show.",
+    "noMatches": "No circuits match your search.",
+    "card": {
+      "showMap": "Show map",
+      "hideMap": "Hide map",
+      "mapTitle": "Map of {{name}}",
+      "openMap": "Open in OpenStreetMap"
+    }
   }
 }

@@ -2,4 +2,55 @@
   [heading]="'pages.circuits.title' | transloco"
   [description]="'pages.circuits.description' | transloco"
 />
-<p class="mt-6 text-secondary">{{ 'pages.inDevelopment' | transloco }}</p>
+
+<div class="mt-6 flex flex-wrap items-center gap-3">
+  <app-search-field
+    class="min-w-56 flex-1"
+    [value]="viewModel.query()"
+    [label]="'circuits.searchLabel' | transloco"
+    [placeholder]="'circuits.searchPlaceholder' | transloco"
+    (valueChange)="viewModel.setQuery($event)"
+  />
+  <app-filter-select
+    [options]="countryOptions()"
+    [selected]="viewModel.country()"
+    [label]="'circuits.filters.country' | transloco"
+    [allLabel]="'circuits.filters.allCountries' | transloco"
+    (selectedChange)="viewModel.setCountry($event)"
+  />
+  @if (viewModel.hasActiveFilters()) {
+    <button
+      type="button"
+      class="rounded-md px-3 py-1.5 text-sm text-secondary underline hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
+      (click)="viewModel.clearFilters()"
+    >
+      {{ 'circuits.filters.clear' | transloco }}
+    </button>
+  }
+</div>
+
+<div class="mt-6">
+  @switch (viewModel.state()) {
+    @case ('loading') {
+      <p role="status" class="text-secondary">{{ 'circuits.loading' | transloco }}</p>
+    }
+    @case ('error') {
+      <app-error-notice [kind]="viewModel.errorKind()" (retry)="viewModel.retry()" />
+    }
+    @case ('ready') {
+      @if (viewModel.entries().length > 0) {
+        <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          @for (circuit of viewModel.entries(); track circuit.id) {
+            <li>
+              <app-circuit-card [circuit]="circuit" />
+            </li>
+          }
+        </ul>
+      } @else if (viewModel.hasActiveFilters()) {
+        <p class="text-secondary">{{ 'circuits.noMatches' | transloco }}</p>
+      } @else {
+        <p class="text-secondary">{{ 'circuits.empty' | transloco }}</p>
+      }
+    }
+  }
+</div>

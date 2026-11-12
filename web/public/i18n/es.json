@@ -114,5 +114,23 @@
     "empty": "Todavía no hay clasificación para esta temporada.",
     "noMatches": "Ningún equipo coincide con la búsqueda.",
     "noChampionship": "En esta temporada no se otorgó el campeonato de constructores, por lo que los equipos no tienen posición ni puntos."
+  },
+  "circuits": {
+    "searchLabel": "Buscar circuitos",
+    "searchPlaceholder": "Buscar por nombre o ciudad",
+    "filters": {
+      "country": "País",
+      "allCountries": "Todos los países",
+      "clear": "Limpiar filtros"
+    },
+    "loading": "Cargando los circuitos…",
+    "empty": "No hay circuitos para mostrar.",
+    "noMatches": "Ningún circuito coincide con la búsqueda.",
+    "card": {
+      "showMap": "Mostrar mapa",
+      "hideMap": "Ocultar mapa",
+      "mapTitle": "Mapa de {{name}}",
+      "openMap": "Abrir en OpenStreetMap"
+    }
   }
 }

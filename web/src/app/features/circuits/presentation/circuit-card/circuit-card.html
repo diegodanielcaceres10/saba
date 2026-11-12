@@ -1,0 +1,32 @@
+<article class="rounded-lg border border-secondary/20 bg-surface p-4">
+  <h2 class="text-lg font-semibold">
+    <span aria-hidden="true">{{ flag() }}</span> {{ circuit().name }}
+  </h2>
+  <p class="text-sm text-secondary">{{ place() }}</p>
+
+  <button
+    type="button"
+    class="mt-3 rounded-md border border-secondary/30 px-3 py-1.5 text-sm text-text hover:border-secondary focus-visible:outline-2 focus-visible:outline-accent"
+    [attr.aria-expanded]="mapOpen()"
+    (click)="toggleMap()"
+  >
+    {{ (mapOpen() ? 'circuits.card.hideMap' : 'circuits.card.showMap') | transloco }}
+  </button>
+
+  @if (mapOpen()) {
+    <iframe
+      class="mt-3 h-64 w-full rounded-md border-0"
+      [src]="embedUrl()"
+      [title]="'circuits.card.mapTitle' | transloco: { name: circuit().name }"
+      loading="lazy"
+    ></iframe>
+    <a
+      class="mt-2 inline-block text-sm text-secondary underline hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
+      target="_blank"
+      rel="noopener noreferrer"
+      [href]="siteUrl()"
+    >
+      {{ 'circuits.card.openMap' | transloco }}
+    </a>
+  }
+</article>
