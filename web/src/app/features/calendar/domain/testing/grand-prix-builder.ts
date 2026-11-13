@@ -43,3 +43,20 @@ export function dateOnlyWeekend(round: number, raceDate: string, season = 1950):
     sessions: [{ type: 'race', date: raceDate, startsAt: null }],
   };
 }
+
+/** A weekend with a sprint, between Friday practice and the race. */
+export function sprintWeekend(round: number, raceStart: string, season = 2024): GrandPrix {
+  const standard = weekend(round, raceStart, season);
+  const race = new Date(raceStart);
+  const [practice, qualifying, raceSession] = standard.sessions;
+  return {
+    ...standard,
+    sessions: [
+      practice,
+      session('sprintQualifying', new Date(race.getTime() - 2 * DAY_MS + 4 * 60 * 60 * 1000)),
+      session('sprint', new Date(race.getTime() - DAY_MS - 2 * 60 * 60 * 1000)),
+      qualifying,
+      raceSession,
+    ],
+  };
+}
