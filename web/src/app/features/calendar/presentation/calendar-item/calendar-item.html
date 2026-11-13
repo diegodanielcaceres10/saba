@@ -8,7 +8,12 @@
         {{ 'calendar.round' | transloco: { round: grandPrix().round } }}
       </p>
       <h2 class="mt-1 text-lg font-semibold">
-        <span aria-hidden="true">{{ flag() }}</span> {{ grandPrix().name }}
+        <span aria-hidden="true">{{ flag() }}</span>
+        <a
+          class="hover:underline focus-visible:outline-2 focus-visible:outline-accent"
+          [routerLink]="['/calendar', grandPrix().season, grandPrix().round]"
+          >{{ grandPrix().name }}</a
+        >
       </h2>
       <p class="text-sm text-secondary">
         {{ grandPrix().circuit.name }} · {{ grandPrix().circuit.locality }},
@@ -48,20 +53,12 @@
     <summary class="cursor-pointer text-sm text-secondary hover:text-text">
       {{ 'calendar.sessions.title' | transloco }}
     </summary>
-    <ul class="mt-2 divide-y divide-secondary/10 text-sm">
-      @for (session of sessions(); track session.type) {
-        <li class="flex flex-wrap justify-between gap-2 py-1.5">
-          <span data-testid="session-name">{{
-            'calendar.sessions.' + session.type | transloco
-          }}</span>
-          <span class="text-secondary">
-            {{ session.day }}
-            @if (session.time; as time) {
-              · {{ time }}
-            }
-          </span>
-        </li>
-      }
-    </ul>
+    <div class="mt-2">
+      <app-session-times
+        [sessions]="grandPrix().sessions"
+        [locale]="locale()"
+        [timeZone]="timeZone()"
+      />
+    </div>
   </details>
 </article>

@@ -6,6 +6,18 @@ export const CALENDAR_ROUTES: Routes = [
   {
     path: '',
     providers: [{ provide: CalendarRepository, useClass: JolpicaCalendarRepository }],
-    loadComponent: () => import('./presentation/calendar-page').then((m) => m.CalendarPage),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./presentation/calendar-page').then((m) => m.CalendarPage),
+      },
+      {
+        path: ':season/:round',
+        loadComponent: () =>
+          import('./presentation/grand-prix-detail/grand-prix-detail-page').then(
+            (m) => m.GrandPrixDetailPage,
+          ),
+      },
+    ],
   },
 ];

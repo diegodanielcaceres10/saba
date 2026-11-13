@@ -61,7 +61,15 @@
     },
     "timeZoneNote": "Los horarios se muestran en su zona horaria ({{zone}}).",
     "loading": "Cargando el calendario…",
-    "empty": "No hay carreras para mostrar."
+    "empty": "No hay carreras para mostrar.",
+    "detail": {
+      "back": "Volver al calendario",
+      "loading": "Cargando el Gran Premio…",
+      "notFound": "No se encontró este Gran Premio.",
+      "season": "Temporada {{season}} · Ronda {{round}}",
+      "circuit": "Circuito",
+      "openMap": "Abrir en OpenStreetMap"
+    }
   },
   "common": {
     "season": {

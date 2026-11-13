@@ -1,0 +1,79 @@
+<a
+  routerLink="/calendar"
+  class="text-sm text-secondary hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
+>
+  <span aria-hidden="true">←</span> {{ 'calendar.detail.back' | transloco }}
+</a>
+
+<div class="mt-4">
+  @switch (viewModel.state()) {
+    @case ('loading') {
+      <p role="status" class="text-secondary">{{ 'calendar.detail.loading' | transloco }}</p>
+    }
+    @case ('error') {
+      <app-error-notice [kind]="viewModel.errorKind()" (retry)="viewModel.retry()" />
+    }
+    @case ('not-found') {
+      <p class="text-secondary">{{ 'calendar.detail.notFound' | transloco }}</p>
+    }
+    @case ('ready') {
+      @if (viewModel.grandPrix(); as grandPrix) {
+        <header>
+          <p class="text-xs tracking-wide text-secondary uppercase">
+            {{
+              'calendar.detail.season'
+                | transloco: { season: grandPrix.season, round: grandPrix.round }
+            }}
+          </p>
+          <div class="mt-1 flex flex-wrap items-center gap-3">
+            <h1 class="text-2xl font-bold">
+              <span aria-hidden="true">{{ flag() }}</span> {{ grandPrix.name }}
+            </h1>
+            <span
+              class="rounded-full bg-base px-2 py-0.5 text-xs font-medium text-secondary"
+              [class.bg-accent]="viewModel.status() === 'in-progress'"
+              [class.text-text]="viewModel.status() === 'in-progress'"
+              data-testid="status"
+            >
+              {{ 'calendar.status.' + viewModel.status() | transloco }}
+            </span>
+          </div>
+        </header>
+
+        <section class="mt-6 rounded-lg border border-secondary/20 bg-surface p-4">
+          <h2 class="text-sm font-semibold tracking-wide text-secondary uppercase">
+            {{ 'calendar.detail.circuit' | transloco }}
+          </h2>
+          <p class="mt-2 font-medium">{{ grandPrix.circuit.name }}</p>
+          <p class="text-sm text-secondary">{{ place() }}</p>
+          @if (mapUrl(); as url) {
+            <a
+              class="mt-2 inline-block text-sm text-secondary underline hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
+              target="_blank"
+              rel="noopener noreferrer"
+              [href]="url"
+            >
+              {{ 'calendar.detail.openMap' | transloco }}
+            </a>
+          }
+        </section>
+
+        <section class="mt-4 rounded-lg border border-secondary/20 bg-surface p-4">
+          <h2 class="text-sm font-semibold tracking-wide text-secondary uppercase">
+            {{ 'calendar.sessions.title' | transloco }}
+          </h2>
+          <div class="mt-2">
+            <app-session-times
+              [sessions]="grandPrix.sessions"
+              [locale]="locale()"
+              [timeZone]="timeZone"
+            />
+          </div>
+          <p class="mt-3 text-xs text-secondary">
+            {{ 'calendar.timeZoneNote' | transloco: { zone: timeZone } }}
+          </p>
+        </section>
+      }
+    }
+  }
+</div>

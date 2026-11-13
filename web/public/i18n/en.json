@@ -61,7 +61,15 @@
     },
     "timeZoneNote": "Times are shown in your time zone ({{zone}}).",
     "loading": "Loading the calendar…",
-    "empty": "There are no races to show."
+    "empty": "There are no races to show.",
+    "detail": {
+      "back": "Back to calendar",
+      "loading": "Loading the Grand Prix…",
+      "notFound": "This Grand Prix could not be found.",
+      "season": "{{season}} season · Round {{round}}",
+      "circuit": "Circuit",
+      "openMap": "Open in OpenStreetMap"
+    }
   },
   "common": {
     "season": {

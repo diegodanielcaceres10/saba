@@ -1,19 +1,15 @@
 import { Component, computed, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { formatDay, formatTime } from '@shared/format/date-time';
 import { flagOf } from '@shared/format/country-flag';
-import { SessionSchedule, raceOf } from '../../domain/grand-prix';
+import { raceOf } from '../../domain/grand-prix';
+import { sessionTimeOf } from '../session-time';
+import { SessionTimes } from '../session-times/session-times';
 import { CalendarEntry } from '../calendar.view-model';
-
-interface SessionTime {
-  readonly day: string;
-  /** `null` when only the date of the session is known. */
-  readonly time: string | null;
-}
 
 @Component({
   selector: 'app-calendar-item',
-  imports: [TranslocoPipe],
+  imports: [RouterLink, TranslocoPipe, SessionTimes],
   templateUrl: './calendar-item.html',
 })
 export class CalendarItem {
@@ -25,21 +21,7 @@ export class CalendarItem {
 
   protected readonly grandPrix = computed(() => this.entry().grandPrix);
   protected readonly flag = computed(() => flagOf(this.grandPrix().circuit.country));
-  protected readonly raceStart = computed(() => this.timeOf(raceOf(this.grandPrix())));
-  protected readonly sessions = computed(() =>
-    this.grandPrix().sessions.map((session) => ({ type: session.type, ...this.timeOf(session) })),
+  protected readonly raceStart = computed(() =>
+    sessionTimeOf(raceOf(this.grandPrix()), this.locale(), this.timeZone()),
   );
-
-  private timeOf(session: SessionSchedule): SessionTime {
-    if (!session.startsAt) {
-      return {
-        day: formatDay(new Date(`${session.date}T00:00:00Z`), this.locale(), 'UTC'),
-        time: null,
-      };
-    }
-    return {
-      day: formatDay(session.startsAt, this.locale(), this.timeZone()),
-      time: formatTime(session.startsAt, this.locale(), this.timeZone()),
-    };
-  }
 }

@@ -1,0 +1,13 @@
+<ul class="divide-y divide-secondary/10 text-sm">
+  @for (row of rows(); track row.type) {
+    <li class="flex flex-wrap justify-between gap-2 py-1.5">
+      <span data-testid="session-name">{{ 'calendar.sessions.' + row.type | transloco }}</span>
+      <span class="text-secondary">
+        {{ row.day }}
+        @if (row.time; as time) {
+          · {{ time }}
+        }
+      </span>
+    </li>
+  }
+</ul>

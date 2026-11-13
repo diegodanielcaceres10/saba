@@ -64,4 +64,43 @@ describe('app routes', () => {
 
     expect(await headingOf('/drivers')).toBe(titles(es as unknown as typeof en)['drivers'].title);
   });
+
+  describe('Grand Prix detail', () => {
+    async function open(url: string) {
+      const harness = await RouterTestingHarness.create(url);
+      harness.fixture.detectChanges();
+      return harness.routeNativeElement as HTMLElement;
+    }
+
+    it('opens from a direct link, inside the shell', async () => {
+      const root = await open('/calendar/2024/3');
+
+      expect(root.querySelector('nav')).not.toBeNull();
+      expect(root.querySelector('main [role="status"]')?.textContent?.trim()).toBe(
+        'Loading the Grand Prix…',
+      );
+    });
+
+    it('keeps Calendar highlighted in the menu', async () => {
+      const root = await open('/calendar/2024/3');
+
+      const current = root.querySelectorAll('nav a[aria-current="page"]');
+      expect(current).toHaveLength(1);
+      expect(current[0].textContent?.trim()).toBe('Calendar');
+    });
+
+    it('does not break on an address that is not a Grand Prix', async () => {
+      const root = await open('/calendar/abcd/1');
+
+      expect(root.querySelector('main')?.textContent).toContain(
+        'This Grand Prix could not be found.',
+      );
+    });
+
+    it('does not take over the calendar itself', async () => {
+      const root = await open('/calendar');
+
+      expect(root.querySelector('main h1')?.textContent?.trim()).toBe('Calendar');
+    });
+  });
 });

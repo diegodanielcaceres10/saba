@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { Subject, of, throwError } from 'rxjs';
 import { ApiError } from '@core/api/jolpica/api-error';
 import { LanguageService } from '@core/i18n/language.service';
@@ -31,6 +32,7 @@ describe('CalendarPage', () => {
     TestBed.configureTestingModule({
       providers: [
         provideAppTranslations(),
+        provideRouter([]),
         { provide: SeasonRepository, useValue: { getSeasons } },
         { provide: CalendarRepository, useValue: { getCalendar } },
         { provide: Clock, useValue: new FixedClock(new Date(NOW)) },

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { provideAppTranslations } from '@core/i18n/testing/provide-app-translations';
 import { GrandPrix } from '../../domain/grand-prix';
@@ -16,7 +17,7 @@ const inAustralia = (grandPrix: GrandPrix): GrandPrix => ({
 
 describe('CalendarItem', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideAppTranslations()] });
+    TestBed.configureTestingModule({ providers: [provideAppTranslations(), provideRouter([])] });
   });
 
   async function render(
@@ -44,6 +45,14 @@ describe('CalendarItem', () => {
     expect(text()).toContain('Round 3');
     expect(text()).toContain('Test Circuit');
     expect(text()).toContain('Testville, Testland');
+  });
+
+  it('links the name of the Grand Prix to its detail page', async () => {
+    const { el } = await render(weekend(3, '2024-03-24T04:00:00Z'));
+
+    const link = el.querySelector('h2 a');
+    expect(link?.getAttribute('href')).toBe('/calendar/2024/3');
+    expect(link?.textContent).toContain('Grand Prix 3');
   });
 
   it('shows the flag of the country as decoration', async () => {
@@ -114,7 +123,7 @@ describe('CalendarItem', () => {
     const next = await render(weekend(3, '2024-03-24T04:00:00Z'), { isNext: true });
     expect(next.el.querySelector('[data-testid="next"]')?.textContent?.trim()).toBe('Next');
     TestBed.resetTestingModule();
-    TestBed.configureTestingModule({ providers: [provideAppTranslations()] });
+    TestBed.configureTestingModule({ providers: [provideAppTranslations(), provideRouter([])] });
 
     const other = await render(weekend(4, '2024-04-07T04:00:00Z'), { isNext: false });
     expect(other.el.querySelector('[data-testid="next"]')).toBeNull();
