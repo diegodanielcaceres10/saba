@@ -10,6 +10,7 @@ import { FixedClock } from '@core/time/testing/fixed-clock';
 import { USER_TIME_ZONE } from '@core/time/user-time-zone';
 import { openStreetMapUrl } from '@shared/maps/open-street-map';
 import { CalendarRepository } from '../../domain/calendar.repository';
+import { ResultsRepository } from '../../domain/results.repository';
 import { GrandPrix } from '../../domain/grand-prix';
 import { weekend } from '../../domain/testing/grand-prix-builder';
 import { GrandPrixDetailPage } from './grand-prix-detail-page';
@@ -24,15 +25,34 @@ const CALENDAR: readonly GrandPrix[] = [
 
 describe('GrandPrixDetailPage', () => {
   const getCalendar = vi.fn();
+  const getRace = vi.fn();
+  const getQualifying = vi.fn();
 
   beforeEach(() => {
     localStorage.clear();
     getCalendar.mockReset().mockImplementation(() => of(CALENDAR));
+    getRace.mockReset().mockImplementation(() =>
+      of([
+        {
+          position: 1,
+          positionText: '1',
+          points: 25,
+          grid: 1,
+          laps: 57,
+          status: 'Finished',
+          time: '1:31:05.323',
+          driver: { id: 'winner', name: 'Race Winner', code: null, number: null },
+          team: { id: 'team', name: 'Team' },
+        },
+      ]),
+    );
+    getQualifying.mockReset().mockImplementation(() => of([]));
     TestBed.configureTestingModule({
       providers: [
         provideAppTranslations(),
         provideRouter([{ path: 'calendar/:season/:round', component: GrandPrixDetailPage }]),
         { provide: CalendarRepository, useValue: { getCalendar } },
+        { provide: ResultsRepository, useValue: { getRace, getQualifying, getSprint: vi.fn() } },
         { provide: Clock, useValue: new FixedClock(new Date(NOW)) },
         { provide: USER_TIME_ZONE, useValue: 'America/Argentina/Buenos_Aires' },
       ],
@@ -127,6 +147,49 @@ describe('GrandPrixDetailPage', () => {
     const { text } = await open();
 
     expect(text()).toContain('Times are shown in your time zone (America/Argentina/Buenos_Aires).');
+  });
+
+  describe('results', () => {
+    it('are shown once the weekend has started', async () => {
+      const { el } = await open('/calendar/2024/2');
+
+      expect(el.querySelector('app-grand-prix-results h2')?.textContent?.trim()).toBe('Results');
+      expect(
+        el.querySelector('app-grand-prix-results [data-testid="name"]')?.textContent?.trim(),
+      ).toBe('Race Winner');
+      expect(getRace).toHaveBeenCalledExactlyOnceWith(2024, 2);
+    });
+
+    it('are shown for a Grand Prix that is over', async () => {
+      const { el } = await open('/calendar/2024/1');
+
+      expect(el.querySelector('app-grand-prix-results')).not.toBeNull();
+    });
+
+    it('are neither shown nor requested before the weekend starts', async () => {
+      const { el } = await open('/calendar/2024/3');
+
+      expect(el.querySelector('app-grand-prix-results')).toBeNull();
+      expect(getRace).not.toHaveBeenCalled();
+    });
+
+    it('are not shown for a Grand Prix that cannot be found', async () => {
+      const { el } = await open('/calendar/2024/9');
+
+      expect(el.querySelector('app-grand-prix-results')).toBeNull();
+    });
+
+    it('change with the tab that is chosen', async () => {
+      const { harness, el } = await open('/calendar/2024/2');
+      const qualifying = Array.from(
+        el.querySelectorAll('app-grand-prix-results [role="group"] button'),
+      ).find((b) => b.textContent?.trim() === 'Qualifying') as HTMLButtonElement;
+
+      qualifying.click();
+      await harness.fixture.whenStable();
+
+      expect(getQualifying).toHaveBeenCalledExactlyOnceWith(2024, 2);
+    });
   });
 
   it('offers a way back to the calendar', async () => {

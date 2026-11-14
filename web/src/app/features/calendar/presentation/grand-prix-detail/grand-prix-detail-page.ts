@@ -8,11 +8,13 @@ import { openStreetMapUrl } from '@shared/maps/open-street-map';
 import { ErrorNotice } from '@shared/ui/error-notice/error-notice';
 import { SessionTimes } from '../session-times/session-times';
 import { GrandPrixDetailViewModel } from './grand-prix-detail.view-model';
+import { GrandPrixResults } from './grand-prix-results';
+import { GrandPrixResultsViewModel } from './grand-prix-results.view-model';
 
 @Component({
   selector: 'app-grand-prix-detail-page',
-  imports: [RouterLink, ErrorNotice, SessionTimes, TranslocoPipe],
-  providers: [GrandPrixDetailViewModel],
+  imports: [RouterLink, ErrorNotice, SessionTimes, GrandPrixResults, TranslocoPipe],
+  providers: [GrandPrixDetailViewModel, GrandPrixResultsViewModel],
   templateUrl: './grand-prix-detail-page.html',
 })
 export class GrandPrixDetailPage {

@@ -2,9 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { TranslocoService } from '@jsverse/transloco';
-import { NEVER } from 'rxjs';
+import { NEVER, of } from 'rxjs';
 import { JolpicaApi } from '@core/api/jolpica/jolpica-api';
 import { DriversRepository } from '@features/drivers';
+import { STANDARD_WEEKEND } from './features/calendar/data/testing/calendar.fixtures';
+import { WINNER } from './features/calendar/data/testing/results.fixtures';
 import { SeasonRepository } from '@features/seasons';
 import { provideAppTranslations } from '@core/i18n/testing/provide-app-translations';
 import { NAV_ITEMS } from '@core/navigation/nav-items';
@@ -78,6 +80,26 @@ describe('app routes', () => {
       expect(root.querySelector('nav')).not.toBeNull();
       expect(root.querySelector('main [role="status"]')?.textContent?.trim()).toBe(
         'Loading the Grand Prix…',
+      );
+    });
+
+    it('shows the results of the race, with every layer wired to the real repositories', async () => {
+      const meta = { series: 'f1', url: 'u', limit: '100', offset: '0', total: '1' };
+      const answers: Record<string, unknown> = {
+        '2024/races': { ...meta, RaceTable: { Races: [STANDARD_WEEKEND] } },
+        '2024/3/results': { ...meta, RaceTable: { Races: [{ Results: [WINNER] }] } },
+      };
+      TestBed.overrideProvider(JolpicaApi, {
+        useValue: { get: (path: string) => of(answers[path]) },
+      });
+
+      const harness = await RouterTestingHarness.create('/calendar/2024/3');
+      await harness.fixture.whenStable();
+
+      const root = harness.routeNativeElement as HTMLElement;
+      expect(root.querySelector('main h1')?.textContent).toContain('Australian Grand Prix');
+      expect(root.querySelector('main [data-testid="name"]')?.textContent?.trim()).toBe(
+        'Max Verstappen',
       );
     });
 

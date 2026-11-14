@@ -1,0 +1,44 @@
+<section>
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h2 class="text-sm font-semibold tracking-wide text-secondary uppercase">
+      {{ 'calendar.results.title' | transloco }}
+    </h2>
+    <app-toggle-group
+      [options]="tabOptions()"
+      [selected]="viewModel.selected()"
+      [label]="'calendar.results.tabs.label' | transloco"
+      (selectedChange)="select($event)"
+    />
+  </div>
+
+  <div class="mt-3">
+    @switch (viewModel.state()) {
+      @case ('loading') {
+        <p role="status" class="text-secondary">{{ 'calendar.results.loading' | transloco }}</p>
+      }
+      @case ('error') {
+        <app-error-notice [kind]="viewModel.errorKind()" (retry)="viewModel.retry()" />
+      }
+      @case ('ready') {
+        @if (viewModel.selected() === 'qualifying') {
+          @if (viewModel.qualifying().length > 0) {
+            <app-qualifying-results-table
+              [entries]="viewModel.qualifying()"
+              [caption]="'calendar.results.caption.qualifying' | transloco"
+            />
+          } @else {
+            <p class="text-secondary">{{ 'calendar.results.empty' | transloco }}</p>
+          }
+        } @else if (viewModel.race().length > 0) {
+          <app-race-results-table
+            [entries]="viewModel.race()"
+            [locale]="locale()"
+            [caption]="'calendar.results.caption.' + viewModel.selected() | transloco"
+          />
+        } @else {
+          <p class="text-secondary">{{ 'calendar.results.empty' | transloco }}</p>
+        }
+      }
+    }
+  </div>
+</section>

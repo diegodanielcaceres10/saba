@@ -73,6 +73,13 @@
             {{ 'calendar.timeZoneNote' | transloco: { zone: timeZone } }}
           </p>
         </section>
+
+        <!-- Nothing has happened yet before the weekend starts, so there is nothing to ask for. -->
+        @if (viewModel.status() !== 'upcoming') {
+          <div class="mt-6">
+            <app-grand-prix-results />
+          </div>
+        }
       }
     }
   }
