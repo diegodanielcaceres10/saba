@@ -98,6 +98,20 @@
         "q3": "Q3",
         "pitLane": "Pit lane"
       }
+    },
+    "history": {
+      "title": "Ediciones anteriores",
+      "loading": "Cargando las ediciones anteriores…",
+      "empty": "No hay ediciones anteriores en este circuito.",
+      "table": {
+        "caption": "Ediciones anteriores de este Gran Premio en el circuito",
+        "year": "Año",
+        "grandPrix": "Gran Premio",
+        "winner": "Ganador",
+        "team": "Equipo"
+      },
+      "showMore": "Mostrar {{count}} ediciones más",
+      "showFewer": "Mostrar menos"
     }
   },
   "common": {

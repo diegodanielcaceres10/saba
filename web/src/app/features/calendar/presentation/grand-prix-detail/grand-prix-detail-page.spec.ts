@@ -9,6 +9,7 @@ import { Clock } from '@core/time/clock';
 import { FixedClock } from '@core/time/testing/fixed-clock';
 import { USER_TIME_ZONE } from '@core/time/user-time-zone';
 import { openStreetMapUrl } from '@shared/maps/open-street-map';
+import { CircuitHistoryRepository } from '@features/circuits';
 import { CalendarRepository } from '../../domain/calendar.repository';
 import { ResultsRepository } from '../../domain/results.repository';
 import { GrandPrix } from '../../domain/grand-prix';
@@ -27,6 +28,7 @@ describe('GrandPrixDetailPage', () => {
   const getCalendar = vi.fn();
   const getRace = vi.fn();
   const getQualifying = vi.fn();
+  const getEditions = vi.fn();
 
   beforeEach(() => {
     localStorage.clear();
@@ -47,11 +49,26 @@ describe('GrandPrixDetailPage', () => {
       ]),
     );
     getQualifying.mockReset().mockImplementation(() => of([]));
+    getEditions.mockReset().mockImplementation(() =>
+      of([
+        {
+          season: 2023,
+          round: 14,
+          name: 'Earlier Grand Prix',
+          date: '2023-09-03',
+          winner: {
+            driver: { id: 'w', name: 'Earlier Winner' },
+            team: { id: 't', name: 'Earlier Team' },
+          },
+        },
+      ]),
+    );
     TestBed.configureTestingModule({
       providers: [
         provideAppTranslations(),
         provideRouter([{ path: 'calendar/:season/:round', component: GrandPrixDetailPage }]),
         { provide: CalendarRepository, useValue: { getCalendar } },
+        { provide: CircuitHistoryRepository, useValue: { getEditions } },
         { provide: ResultsRepository, useValue: { getRace, getQualifying, getSprint: vi.fn() } },
         { provide: Clock, useValue: new FixedClock(new Date(NOW)) },
         { provide: USER_TIME_ZONE, useValue: 'America/Argentina/Buenos_Aires' },
@@ -189,6 +206,33 @@ describe('GrandPrixDetailPage', () => {
       await harness.fixture.whenStable();
 
       expect(getQualifying).toHaveBeenCalledExactlyOnceWith(2024, 2);
+    });
+  });
+
+  describe('previous editions', () => {
+    it('are shown, for the circuit of the Grand Prix', async () => {
+      const { el } = await open('/calendar/2024/2');
+
+      expect(el.querySelector('app-grand-prix-history h2')?.textContent?.trim()).toBe(
+        'Previous editions',
+      );
+      expect(
+        el.querySelector('app-grand-prix-history [data-testid="winner"]')?.textContent?.trim(),
+      ).toBe('Earlier Winner');
+      expect(getEditions).toHaveBeenCalledExactlyOnceWith('test_circuit');
+    });
+
+    it('are shown even before the weekend starts, as they belong to the circuit', async () => {
+      const { el } = await open('/calendar/2024/3');
+
+      expect(el.querySelector('app-grand-prix-history')).not.toBeNull();
+    });
+
+    it('are not shown for a Grand Prix that cannot be found', async () => {
+      const { el } = await open('/calendar/2024/9');
+
+      expect(el.querySelector('app-grand-prix-history')).toBeNull();
+      expect(getEditions).not.toHaveBeenCalled();
     });
   });
 

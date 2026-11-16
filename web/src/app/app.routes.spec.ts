@@ -4,9 +4,11 @@ import { RouterTestingHarness } from '@angular/router/testing';
 import { TranslocoService } from '@jsverse/transloco';
 import { NEVER, of } from 'rxjs';
 import { JolpicaApi } from '@core/api/jolpica/jolpica-api';
+import { CircuitHistoryRepository, JolpicaCircuitHistoryRepository } from '@features/circuits';
 import { DriversRepository } from '@features/drivers';
 import { STANDARD_WEEKEND } from './features/calendar/data/testing/calendar.fixtures';
 import { WINNER } from './features/calendar/data/testing/results.fixtures';
+import { EDITION_2023 } from './features/circuits/data/testing/circuit-history.fixtures';
 import { SeasonRepository } from '@features/seasons';
 import { provideAppTranslations } from '@core/i18n/testing/provide-app-translations';
 import { NAV_ITEMS } from '@core/navigation/nav-items';
@@ -24,6 +26,7 @@ describe('app routes', () => {
         { provide: JolpicaApi, useValue: { get: () => NEVER } },
         { provide: SeasonRepository, useValue: { getSeasons: () => NEVER } },
         { provide: DriversRepository, useValue: { getStandings: () => NEVER } },
+        { provide: CircuitHistoryRepository, useClass: JolpicaCircuitHistoryRepository },
       ],
     });
   });
@@ -83,11 +86,12 @@ describe('app routes', () => {
       );
     });
 
-    it('shows the results of the race, with every layer wired to the real repositories', async () => {
+    it('shows the results and the history, with every layer wired to the real repositories', async () => {
       const meta = { series: 'f1', url: 'u', limit: '100', offset: '0', total: '1' };
       const answers: Record<string, unknown> = {
         '2024/races': { ...meta, RaceTable: { Races: [STANDARD_WEEKEND] } },
         '2024/3/results': { ...meta, RaceTable: { Races: [{ Results: [WINNER] }] } },
+        'circuits/albert_park/results/1': { ...meta, RaceTable: { Races: [EDITION_2023] } },
       };
       TestBed.overrideProvider(JolpicaApi, {
         useValue: { get: (path: string) => of(answers[path]) },
@@ -101,6 +105,7 @@ describe('app routes', () => {
       expect(root.querySelector('main [data-testid="name"]')?.textContent?.trim()).toBe(
         'Max Verstappen',
       );
+      expect(root.querySelector('main [data-testid="year"]')?.textContent?.trim()).toBe('2023');
     });
 
     it('keeps Calendar highlighted in the menu', async () => {

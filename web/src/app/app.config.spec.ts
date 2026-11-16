@@ -6,6 +6,7 @@ import { CachingJolpicaApi } from './core/api/jolpica/caching-jolpica-api';
 import { JolpicaApi } from './core/api/jolpica/jolpica-api';
 import { LanguageService } from './core/i18n/language.service';
 import { DriversRepository, JolpicaDriversRepository } from '@features/drivers';
+import { CircuitHistoryRepository, JolpicaCircuitHistoryRepository } from '@features/circuits';
 import { JolpicaSeasonRepository, SeasonRepository } from '@features/seasons';
 
 describe('appConfig', () => {
@@ -43,5 +44,15 @@ describe('appConfig', () => {
     });
 
     expect(TestBed.inject(DriversRepository)).toBeInstanceOf(JolpicaDriversRepository);
+  });
+
+  it('provides the Jolpica implementation of the circuit history repository', () => {
+    TestBed.configureTestingModule({
+      providers: [...appConfig.providers, provideHttpClientTesting()],
+    });
+
+    expect(TestBed.inject(CircuitHistoryRepository)).toBeInstanceOf(
+      JolpicaCircuitHistoryRepository,
+    );
   });
 });

@@ -1,0 +1,84 @@
+<section>
+  <h2 class="text-sm font-semibold tracking-wide text-secondary uppercase">
+    {{ 'calendar.history.title' | transloco }}
+  </h2>
+
+  <div class="mt-3">
+    @switch (viewModel.state()) {
+      @case ('loading') {
+        <p role="status" class="text-secondary">{{ 'calendar.history.loading' | transloco }}</p>
+      }
+      @case ('error') {
+        <app-error-notice [kind]="viewModel.errorKind()" (retry)="viewModel.retry()" />
+      }
+      @case ('ready') {
+        @if (viewModel.editions().length === 0) {
+          <p class="text-secondary">{{ 'calendar.history.empty' | transloco }}</p>
+        } @else {
+          <div class="overflow-x-auto rounded-lg border border-secondary/20 bg-surface">
+            <table class="w-full text-left text-sm">
+              <caption class="sr-only">
+                {{
+                  'calendar.history.table.caption' | transloco
+                }}
+              </caption>
+              <thead
+                class="border-b border-secondary/20 text-xs tracking-wide text-secondary uppercase"
+              >
+                <tr>
+                  <th scope="col" class="px-3 py-2 font-medium">
+                    {{ 'calendar.history.table.year' | transloco }}
+                  </th>
+                  <th scope="col" class="px-3 py-2 font-medium">
+                    {{ 'calendar.history.table.grandPrix' | transloco }}
+                  </th>
+                  <th scope="col" class="px-3 py-2 font-medium">
+                    {{ 'calendar.history.table.winner' | transloco }}
+                  </th>
+                  <th scope="col" class="hidden px-3 py-2 font-medium md:table-cell">
+                    {{ 'calendar.history.table.team' | transloco }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-secondary/10">
+                @for (edition of viewModel.visible(); track edition.season + '-' + edition.round) {
+                  <tr>
+                    <th scope="row" class="px-3 py-2 font-normal tabular-nums">
+                      <a
+                        class="font-medium underline hover:text-accent focus-visible:outline-2 focus-visible:outline-accent"
+                        data-testid="year"
+                        [routerLink]="['/calendar', edition.season, edition.round]"
+                        >{{ edition.season }}</a
+                      >
+                    </th>
+                    <td class="px-3 py-2 text-secondary" data-testid="name">{{ edition.name }}</td>
+                    <td class="px-3 py-2" data-testid="winner">
+                      {{ edition.winner?.driver?.name ?? '—' }}
+                    </td>
+                    <td class="hidden px-3 py-2 text-secondary md:table-cell" data-testid="team">
+                      {{ edition.winner?.team?.name ?? '—' }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          @if (viewModel.canToggle()) {
+            <button
+              type="button"
+              class="mt-3 rounded-md px-3 py-1.5 text-sm text-secondary underline hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
+              (click)="viewModel.toggleExpanded()"
+            >
+              @if (viewModel.expanded()) {
+                {{ 'calendar.history.showFewer' | transloco }}
+              } @else {
+                {{ 'calendar.history.showMore' | transloco: { count: viewModel.hiddenCount() } }}
+              }
+            </button>
+          }
+        }
+      }
+    }
+  </div>
+</section>

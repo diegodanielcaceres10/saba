@@ -11,6 +11,7 @@ import { provideTransloco } from '@jsverse/transloco';
 import { routes } from './app.routes';
 import { provideJolpicaApi } from './core/api/jolpica/provide-jolpica-api';
 import { LanguageService } from './core/i18n/language.service';
+import { CircuitHistoryRepository, JolpicaCircuitHistoryRepository } from '@features/circuits';
 import { DriversRepository, JolpicaDriversRepository } from '@features/drivers';
 import { JolpicaSeasonRepository, SeasonRepository } from '@features/seasons';
 import { TRANSLOCO_BASE_CONFIG } from './core/i18n/transloco-config';
@@ -24,6 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideJolpicaApi(),
     { provide: SeasonRepository, useClass: JolpicaSeasonRepository },
     { provide: DriversRepository, useClass: JolpicaDriversRepository },
+    { provide: CircuitHistoryRepository, useClass: JolpicaCircuitHistoryRepository },
     provideTransloco({
       config: { ...TRANSLOCO_BASE_CONFIG, prodMode: !isDevMode() },
       loader: TranslocoHttpLoader,
